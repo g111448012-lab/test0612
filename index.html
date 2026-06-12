@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>二二八戒嚴劇本殺</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts for Retro Newspaper feel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Noto Serif TC', 'serif'],
+            mono: ['Courier Prime', 'monospace'],
+          },
+          colors: {
+            news: {
+              paper: '#f2efe9',       // 舊報紙米黃白
+              darkpaper: '#e1dbcf',   // 較深色氧化報紙灰
+              ink: '#1a1a1a',         // 印刷油墨黑
+              lead: '#3f3a35',        // 活字鉛字灰
+              gray: '#6b665f',        // 灰階
+              red: '#991b1b',         // 歷史血印紅
+              lightred: '#fef2f2',    // 淺紅底
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Noto Serif TC', serif;
+      background-color: #f2efe9;
+      color: #1a1a1a;
+      background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+    
+    .news-double-border {
+      border: 4px double #1a1a1a;
+    }
+    .news-single-border {
+      border: 1px solid #1a1a1a;
+    }
+    
+    .newspaper-columns {
+      column-count: 1;
+    }
+    @media (min-width: 768px) {
+      .newspaper-columns {
+        column-count: 2;
+        column-gap: 2rem;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e1dbcf;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1a1a1a;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-news-ink selection:text-news-paper">
+
+  <!-- 報頭區域 (仿古舊報章格式) -->
+  <header class="border-b-4 border-news-ink py-6 px-4 md:px-8 bg-news-paper">
+    <div class="max-w-7xl mx-auto">
+      <!-- 頂部副標 -->
+      <div class="flex justify-between items-center text-xs font-mono border-b border-news-ink pb-2 mb-4">
+        <span></span>
+        <span class="font-bold">號外 / EXTRA</span>
+        <span class="tracking-widest font-bold">局勢掌握專用系統</span>
+      </div>
+      
+      <!-- 主報頭標題 -->
+      <div class="text-center my-6">
+        <h1 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-widest text-news-ink uppercase font-serif">
+          二二八戒嚴劇本殺
+        </h1>
+      </div>
+
+      <!-- 報底日期欄 -->
+      <div class="border-t-4 border-news-ink pt-2 flex flex-col sm:flex-row justify-between items-center text-xs font-bold text-news-lead gap-2">
+        <div><span>臺灣省警備總司令部 · 管制局發行</span></div>
+        <div class="flex gap-4">
+          <span>時局：戒嚴前夕</span>
+          <span>狀態：嚴密監控</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 歷史事件警告跑馬燈 / 頂部公告區 (當學生a/b/c死亡時觸發) -->
+  <div id="alertBanner" class="hidden bg-news-red text-news-paper py-4 px-6 shadow-xl border-b-4 border-news-ink transition-all duration-500">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl animate-pulse">⚠️</span>
+        <div>
+          <h3 class="font-black text-lg tracking-wider font-serif">時局急轉直下：【社會百姓大規模抗議】事件爆發！</h3>
+          <p class="text-xs opacity-90 font-serif mt-0.5">警告：政府在取締讀書會的過程中殺害了無辜百姓（一般學生）！死訊傳出，引發學生家長及街頭民眾大規模集結罷市、包圍警署！</p>
+        </div>
+      </div>
+      <button onclick="dismissAlert()" class="bg-news-paper text-news-ink border border-news-ink hover:bg-news-darkpaper font-bold py-1 px-3 rounded text-xs transition">
+        抹平消息
+      </button>
+    </div>
+  </div>
+
+  <!-- 主內容區 -->
+  <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    
+    <!-- 左側欄：控制面板 (學生名單與分派) -->
+    <section class="lg:col-span-4 flex flex-col gap-6">
+      
+      <!-- 步驟 1: 名冊輸入 (仿公文紙封) -->
+      <div class="bg-news-paper border-2 border-news-ink p-6 rounded shadow-sm relative">
+        <div class="absolute -top-3 left-4 bg-news-ink text-news-paper px-3 py-0.5 text-xs font-bold tracking-wider">
+          編制 · 學生名冊
+        </div>
+        
+        <h2 class="text-lg font-bold mb-3 text-news-ink flex items-center gap-2 border-b border-news-ink pb-2">
+          <i class="fa-solid fa-file-pen"></i> 輸入課堂名單
+        </h2>
+        <p class="text-xs text-news-lead mb-3 leading-relaxed">
+          請在下方文字框中，以<strong>「一人一行」</strong>的方式輸入本堂課學生的姓名或座號。
+        </p>
+        
+        <div class="mb-4">
+          <textarea id="studentInput" rows="10" 
+            class="w-full bg-news-paper border border-news-ink rounded p-3 text-news-ink font-mono text-sm focus:outline-none focus:ring-1 focus:ring-news-ink transition"
+            placeholder="洪妤婷&#10;蘇珮瀅&#10;陳宇詰"
+            oninput="updateStudentCount()"></textarea>
+        </div>
+        
+        <div class="flex items-center justify-between bg-news-darkpaper/40 p-3 border border-news-ink/50">
+          <span class="text-xs text-news-lead font-bold">登入總人數：</span>
+          <span class="text-lg font-mono font-bold text-news-red" id="studentCount">0 人</span>
+        </div>
+      </div>
+
+      <!-- 步驟 2: 隨機指派 (仿軍事動員令) -->
+      <div class="bg-news-paper border-2 border-news-ink p-6 rounded shadow-sm relative">
+        <div class="absolute -top-3 left-4 bg-news-ink text-news-paper px-3 py-0.5 text-xs font-bold tracking-wider">
+          動員 · 指派任務
+        </div>
+        
+        <h2 class="text-lg font-bold mb-3 text-news-ink flex items-center gap-2 border-b border-news-ink pb-2">
+          <i class="fa-solid fa-dice"></i> 派發歷史身分
+        </h2>
+        <p class="text-xs text-news-lead mb-4 leading-relaxed">
+          系統將自動對照全班人數。如果人數超出或低於 30 人，系統將透過調整<strong>「社會百姓」</strong>的人數來維持平衡，確保每位同學皆能參演。
+        </p>
+
+        <!-- 角色結構簡介 -->
+        <details class="mb-4 group bg-news-darkpaper/20 border border-news-ink rounded overflow-hidden text-xs">
+          <summary class="p-2.5 text-news-ink font-bold cursor-pointer select-none flex justify-between items-center hover:bg-news-darkpaper/30">
+            <span>檢視全盤角色席位 (基準：30席)</span>
+            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180"></i>
+          </summary>
+          <div class="p-3 text-news-lead space-y-2 border-t border-news-ink bg-news-paper/40">
+            <div><strong class="text-news-red">政府陣營 (7席)</strong>：蔣中正(2)、國民大會(2)、警察1/2/3(各1)、學生臥底(2)</div>
+            <div><strong class="text-news-ink underline">讀書會/共產黨 (15席)</strong>：王雪紅[Target](2)、陳澄波(2)、潘禾枝(2)、施江南(2)、學生a/b/c(各2)、林茂生(2)</div>
+            <div><strong class="text-news-gray">百姓陣營 (8席)</strong>：學生a的媽媽(2)、學生b的阿公(2)、雜貨店老闆(2)、社會百姓(2，視人數自動增減)</div>
+          </div>
+        </details>
+
+        <button onclick="distributeRoles()" 
+          class="w-full bg-news-ink hover:bg-news-lead text-news-paper font-bold py-3 px-4 rounded tracking-wider transition-all transform active:scale-95 flex items-center justify-center gap-2 shadow">
+          <i class="fa-solid fa-shuffle"></i> 執行隨機分派
+        </button>
+      </div>
+
+    </section>
+
+    <!-- 右側欄：老師管理後台 -->
+    <section class="lg:col-span-8 flex flex-col gap-6">
+      
+      <!-- 控制列 -->
+      <div class="bg-news-paper border border-news-ink p-6 rounded shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-news-ink font-serif flex items-center gap-2">
+            <i class="fa-solid fa-users-gear text-news-red"></i> 全班狀態監督
+          </h2>
+          <p class="text-xs text-news-lead mt-1">教師專用。點擊學生姓名可開啟「秘密抽籤盲抽彈窗」供學生上前確認身分。</p>
+        </div>
+        
+        <div class="flex flex-wrap items-center gap-3">
+          <button id="toggleHideBtn" onclick="toggleHideRoles()" disabled
+            class="bg-news-paper hover:bg-news-darkpaper disabled:opacity-40 text-news-ink text-xs font-bold py-2 px-3 border border-news-ink flex items-center gap-2 transition">
+            <i id="hideIcon" class="fa-solid fa-eye-slash"></i>
+            <span id="hideText">投影保密模式：關</span>
+          </button>
+          
+          <button onclick="resetSystem()" 
+            class="text-news-gray hover:text-news-red text-xs py-2 px-3 border border-dashed border-news-gray/60 hover:border-news-red transition">
+            <i class="fa-solid fa-rotate-left"></i> 重設
+          </button>
+        </div>
+      </div>
+
+      <!-- 學生卡片顯示區 -->
+      <div class="bg-news-paper border-2 border-news-ink p-6 rounded shadow-sm flex-grow relative min-h-[400px]">
+        <div class="absolute -top-3 left-4 bg-news-ink text-news-paper px-3 py-0.5 text-xs font-bold tracking-wider">
+          學生席位狀態
+        </div>
+
+        <!-- 即時陣營與生死統計 -->
+        <div class="flex flex-wrap gap-4 items-center justify-between mb-6 text-xs text-news-lead border-b border-news-ink/40 pb-4">
+          <div class="flex flex-wrap gap-2 font-mono" id="factionStats">
+            <span>政府監控：<strong class="text-news-red" id="statGov">0</strong> 員</span> |
+            <span>讀書會組織：<strong class="text-news-ink underline" id="statComm">0</strong> 員</span> |
+            <span>地方百姓：<strong class="text-news-gray" id="statCiv">0</strong> 員</span> |
+            <span>存活：<strong class="text-emerald-800" id="statAlive">0</strong></span> /
+            <span>喪生：<strong class="text-news-red" id="statDead">0</strong></span>
+          </div>
+          <div>
+            <span class="italic text-[10px] text-news-gray">※ 點擊人名可開啟極機密公文封確認角色</span>
+          </div>
+        </div>
+
+        <!-- 尚未分派之空白提示 -->
+        <div id="emptyState" class="flex flex-col items-center justify-center py-24 text-center">
+          <i class="fa-solid fa-box-archive text-5xl text-news-darkpaper mb-4"></i>
+          <p class="text-news-lead font-serif text-sm">課堂沙盤尚未啟動</p>
+          <p class="text-xs text-news-gray mt-1">請先於左側輸入名冊並點擊「執行隨機分派」</p>
+        </div>
+
+        <!-- 學生卡片 GRID -->
+        <div id="studentGrid" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 卡片由 JS 動態生成 -->
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- 頁尾 -->
+  <footer class="mt-auto bg-news-ink py-4 px-4 text-center text-xs text-news-paper">
+    <p>二二八戒嚴劇本殺課堂管理系統 · 歷史探究與實作專用教材</p>
+  </footer>
+
+  <!-- 彈窗A：學生秘密抽籤 (學生盲抽) -->
+  <div id="secretModal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-news-paper text-news-ink max-w-lg w-full rounded border-4 border-news-ink p-6 md:p-8 transform transition-all relative overflow-hidden shadow-2xl">
+      <!-- 舊報紙風格格紋襯底 -->
+      <div class="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:12px_12px]"></div>
+      
+      <!-- 極機密紅色印章 -->
+      <div class="absolute right-4 top-4 border-4 border-news-red text-news-red font-black tracking-widest text-xs px-3 py-1 rotate-12 select-none uppercase">
+        限閱 DOCUMENT
+      </div>
+
+      <div class="relative z-10">
+        <div class="border-b-2 border-news-ink pb-3 mb-4">
+          <span class="text-xs text-news-red font-mono font-bold tracking-widest block mb-1">■ 臺灣警備總司令部 機密檔案處</span>
+          <h3 class="text-xl font-black tracking-wider text-news-ink font-serif flex items-center gap-2">
+            <i class="fa-solid fa-user-secret"></i> 個人機密身分確認
+          </h3>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <span class="text-xs text-news-gray block">學生姓名 / 座號</span>
+            <span class="text-lg font-bold font-serif text-news-ink" id="modalStudentName">學生姓名</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 bg-news-darkpaper/30 p-4 rounded border border-news-ink/30">
+            <div>
+              <span class="text-xs text-news-gray block">指定歷史身分</span>
+              <span class="text-base font-black text-news-red font-serif" id="modalRoleName">角色名稱</span>
+            </div>
+            <div>
+              <span class="text-xs text-news-gray block">所屬陣營</span>
+              <span class="text-base font-black font-serif" id="modalFactionName">陣營</span>
+            </div>
+          </div>
+
+          <div class="bg-news-darkpaper/20 p-4 rounded border-l-4 border-news-ink">
+            <span class="text-xs text-news-ink font-bold block mb-1"><i class="fa-solid fa-flag"></i> 角色歷史任務簡介</span>
+            <p class="text-xs text-news-lead leading-relaxed font-serif" id="modalRoleGoal">
+              目標簡介載入中...
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-news-ink/20 flex justify-end">
+          <button onclick="closeSecretModal()" 
+            class="w-full md:w-auto bg-news-ink hover:bg-news-lead text-news-paper font-bold py-2.5 px-8 rounded tracking-wider text-xs transition-all shadow">
+            我已確認，關閉檔案以免洩密
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 彈窗B：歷史人物遇害「社會新聞號外」 (真實歷史事件聯動) -->
+  <div id="historicalNewsModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-news-paper text-news-ink max-w-2xl w-full rounded border-4 border-news-ink p-6 md:p-8 transform transition-all relative shadow-2xl news-double-border">
+      <!-- 機密紅色印章 -->
+      <div class="absolute right-4 top-4 border-2 border-news-red text-news-red font-black tracking-widest text-[10px] px-2 py-0.5 rotate-6 select-none uppercase">
+        歷史真實事件
+      </div>
+
+      <div class="relative z-10">
+        <!-- 號外報頭 -->
+        <div class="text-center border-b-4 border-news-ink pb-4 mb-6">
+          <span class="text-xs font-mono tracking-widest text-news-red font-bold">【 號外 · EXTRA 】</span>
+          <h2 class="text-2xl md:text-3xl font-black tracking-wider text-news-ink font-serif my-2">
+            悲痛！本省知名社會賢達驚傳遇害
+          </h2>
+          <span class="text-xs text-news-gray" id="historicalNewsDate">中華民國三十六年三月</span>
+        </div>
+
+        <!-- 新聞內文 (分欄視覺) -->
+        <div class="newspaper-columns text-news-ink text-sm leading-relaxed font-serif">
+          <p class="font-bold text-news-red mb-2 text-base" id="historicalNewsHeadline">
+            <!-- 動態插入標題 -->
+          </p>
+          <div class="text-xs text-news-lead space-y-3" id="historicalNewsBody">
+            <!-- 動態插入歷史敘述 -->
+          </div>
+        </div>
+
+        <!-- 課堂教育提示 -->
+        <div class="mt-6 p-3 bg-news-lightred border border-news-red/30 rounded text-xs text-news-red font-serif">
+          <strong class="block mb-1">💡 課堂延伸省思：</strong>
+          在 1947 年的二二八事件與後來的戒嚴、白色恐怖時期，大批無辜的台灣社會菁英、知識份子在未經公開、公正審判的情況下遭到軍警逮捕、秘密處決或失蹤。這對當時的台灣社會造成了嚴重的創傷，也引發了數十年的禁忌與恐懼。
+        </div>
+
+        <!-- 關閉按鈕 -->
+        <div class="mt-6 pt-4 border-t border-news-ink/20 flex justify-end">
+          <button onclick="closeHistoricalNewsModal()" 
+            class="w-full md:w-auto bg-news-red hover:bg-red-900 text-white font-bold py-2.5 px-8 rounded tracking-wider text-xs transition-all shadow">
+            合上報紙，繼續推動劇本
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript 核心邏輯 -->
+  <script>
+    // 1. 角色資料庫設定
+    const ORIGINAL_ROLE_POOL = [
+      // 政府陣營 (7人)
+      { name: "蔣中正", faction: "government", baseQty: 2, goal: "身為國家元首，必須全力抓出讀書會與共產黨首長（特別是王雪紅），但要注意不可濫殺百姓或一般學生，以免引發大規模抗議並導致國際輿論譴責。" },
+      { name: "國民大會", faction: "government", baseQty: 2, goal: "擁護憲法與政府體制，協助政府搜捕共產黨。要與蔣中正緊密配合，防範讀書會赤化一般民眾。" },
+      { name: "警察1", faction: "government", baseQty: 1, goal: "第一線執法者。聽從上級指示逮捕可疑分子。注意！若逮捕到無辜百姓或殺害一般學生，可能會引發重大社會抗議事件。" },
+      { name: "警察2", faction: "government", baseQty: 1, goal: "第一線執法者。聽從上級指示逮捕可疑分子。注意！若逮捕到無辜百姓或殺害一般學生，可能會引發重大社會抗議事件。" },
+      { name: "警察3", faction: "government", baseQty: 1, goal: "第一線執法者。聽從上級指示逮捕可疑分子。注意！若逮捕到無辜百姓或殺害一般學生，可能會引發重大社會抗議事件。" },
+      { name: "學生臥底", faction: "government", baseQty: 2, goal: "奉命潛入校園讀書會。偽裝成一般學生，暗中蒐集讀書會成員名單，並向警察或蔣中正密報。切記不要暴露身份！" },
+
+      // 讀書會與共產黨陣營 (15人)
+      { name: "王雪紅 [共產黨/Target]", faction: "communist", baseQty: 2, goal: "讀書會核心組織者，也是政府逮捕的頭號目標。必須極力隱藏身份，透過讀書會將周圍的學生與百姓「赤化」，壯大紅色革命力量。" },
+      { name: "陳澄波 [畫家]", faction: "communist", baseQty: 2, goal: "熱愛鄉土的知名畫家，心繫人民福祉。暗中支持讀書會，用藝術和畫作宣傳和平與民主。需避免被政府冠上叛亂罪名逮捕。" },
+      { name: "潘禾枝 [教授]", faction: "communist", baseQty: 2, goal: "大學教授。暗中主持地下讀書會，向學生傳播進步思想。你的目標是保護讀書會的學生，並暗中協助王雪紅發展組織。" },
+      { name: "施江南 醫學教授", faction: "communist", baseQty: 2, goal: "醫學博士與社會賢達，暗中醫治受傷的讀書會成員。必須利用自己的社會聲望掩護同伴，同時極力保全學生的生命安全。" },
+      { name: "學生a", faction: "communist", baseQty: 2, goal: "熱血青年，讀書會積極分子。容易成為政府與警察盯上的目標。若你不幸死亡，將會引發社會巨大震動（觸發大規模抗議）。" },
+      { name: "學生b", faction: "communist", baseQty: 2, goal: "熱血青年，讀書會積極分子。容易成為政府與警察盯上的目標。若你不幸死亡，將會引發社會巨大震動（觸發大規模抗議）。" },
+      { name: "學生c", faction: "communist", baseQty: 2, goal: "熱血青年，讀書會積極分子。容易成為政府與警察盯上的目標。若你不幸死亡，將會引發社會巨大震動（觸發大規模抗議）。" },
+      { name: "林茂生 哲學博士", faction: "communist", baseQty: 2, goal: "台灣第一位哲學博士，辦報鼓吹民主，同情學生運動。必須引導輿論支持讀書會，抵制高壓統治。若被政府逮捕，讀書會將失去精神支柱。" },
+
+      // 百姓陣營 (8人)
+      { name: "學生a的媽媽", faction: "civilian", baseQty: 2, goal: "普通平民，極度關心孩子（學生a）的安全。如果你的孩子遭遇不幸，你將不顧一切發動抗議。你的任務是找出誰是臥底與殺手。" },
+      { name: "學生b的阿公", faction: "civilian", baseQty: 2, goal: "經歷過日治時期的老人家，疼愛孫子（學生b）。你的目標是確保孫子在動盪中存活，並在社會陷入混亂時，呼籲大家保持理智與團結。" },
+      { name: "雜貨店老闆", faction: "civilian", baseQty: 2, goal: "街角雜貨店的主人。消息靈通，能偷聽到各路人馬的耳語。請保持中立，利用情報保護自己，同時暗中幫助求助的平民或學生。" },
+      { name: "社會百姓", faction: "civilian", baseQty: 2, goal: "時代洪流下艱難求生的普通百姓. 沒什麼野心，只求能安居樂業。支持公理正義，如果政府濫殺學生，你將會加入大規模抗議行列。" }
+    ];
+
+    // 歷史社會名人真實歷史資料庫
+    const HISTORICAL_PEOPLE_INFO = {
+      "陳澄波 [畫家]": {
+        headline: "名畫家陳澄波代表民眾前往協調，竟於嘉義站前遭公開槍決！",
+        date: "民國三十六年三月二十五日 · 嘉義",
+        body: `
+          本省藝術界巨擘、嘉義市參議員陳澄波先生，於二二八事件期間，因心繫全體市民安危，受推選為「和平使者」代表，帶領談判團前往水上機場與軍方進行和平談判與協商。
+          <br><br>
+          然而，軍方卻違背和平承諾，在談判現場將協商代表全數逮捕。今日上午，陳澄波先生雙手反綁，被軍警押往嘉義火車站前，在未經任何公開司法審判的情況下，當眾遭到殘忍槍斃，暴屍街頭，舉國譁然。一代畫家竟以此悲劇收場，令人無限痛惜與憤怒。
+        `
+      },
+      "潘禾枝 [教授]": {
+        headline: "名譽全省之參議員遭逮捕處決！知識份子人人自危",
+        date: "民國三十六年三月 · 台灣",
+        body: `
+          知名教授暨地方賢達潘木枝（劇中化名潘禾枝）先生，平日深受鄉里愛戴，二二八事件期間積極維持地方秩序，並擔任和平處理委員會成員前往斡旋。
+          <br><br>
+          據目擊者透露，軍警在毫無合理罪證指控下將其強行拘捕。縱使其行醫大半生、作育英才無數，仍於近日被冠上「叛亂罪名」在公眾面前處死。本省菁英、學校教授接連遇害，台灣社會元氣大傷，學術界更陷入一片死寂與白色恐怖。
+        `
+      },
+      "施江南 醫學教授": {
+        headline: "台灣第二位醫學博士施江南 於四海醫院遭強行帶走音訊全無",
+        date: "民國三十六年三月 · 台北",
+        body: `
+          台灣醫學泰斗、台北市醫師公會會長施江南博士，於二二八事件期間，因秉持人道精神醫治在動亂中受傷的學生與民眾，驚傳突遭便衣軍警強行登門搜捕。
+          <br><br>
+          據其四海醫院職員透露，昨日深夜，一組全副武裝的軍警闖入診所，不容分說將施江南博士強行押上軍車，從此人間蒸發、音訊杳然（後被證實已於秘密處決中遇害）。這位名滿全省的醫學菁英無辜受牽連，反映出當時社會菁英人人自危的悲劇實相。
+        `
+      },
+      "林茂生 哲學博士": {
+        headline: "台大教授、民報社長林茂生 遭便衣強行帶走一去不回",
+        date: "民國三十六年三月十一日 · 台北",
+        body: `
+          台灣首位哲學博士、台灣大學教授兼《民報》社長林茂生先生，於今日上午遭數名自稱是警備總部的便衣特務強行帶走。
+          <br><br>
+          林博士平日倡導民主與言論自由、作風剛直，深得學生尊敬。其家屬心急如焚多方奔走求助，軍方卻對其下落含糊其詞，未給予任何交代（實已遭秘密殺害）。台灣言論與學術自由的大門，自此被重重鎖上，正式踏入冰封寒冬。
+        `
+      }
+    };
+
+    // 全域變數
+    let currentStudents = []; // 學生資料
+    let isRoleHidden = false; // 投影保密
+
+    // 陣營對應名稱與樣式
+    const FACTION_MAP = {
+      government: { name: "政府陣營", textClass: "text-news-red", bgClass: "bg-red-100", borderClass: "border-news-red" },
+      communist: { name: "讀書會與共產黨", textClass: "text-news-ink underline", bgClass: "bg-news-darkpaper/40", borderClass: "border-news-ink" },
+      civilian: { name: "百姓陣營", textClass: "text-news-gray", bgClass: "bg-gray-100", borderClass: "border-news-gray/50" }
+    };
+
+    // 初始無預設姓名，直接清空數值
+    window.onload = function() {
+      document.getElementById("studentInput").value = "";
+      updateStudentCount();
+    }
+
+    function updateStudentCount() {
+      const text = document.getElementById("studentInput").value;
+      const names = parseStudentNames(text);
+      document.getElementById("studentCount").innerText = `${names.length} 人`;
+    }
+
+    function parseStudentNames(text) {
+      return text.split("\n")
+                 .map(name => name.trim())
+                 .filter(name => name !== "");
+    }
+
+    // 隨機分派角色演算法
+    function distributeRoles() {
+      const namesInput = document.getElementById("studentInput").value;
+      const studentNames = parseStudentNames(namesInput);
+
+      if (studentNames.length === 0) {
+        alert("請先輸入學生名冊！");
+        return;
+      }
+
+      dismissAlert();
+
+      const totalStudents = studentNames.length;
+      let activeRolePool = [];
+      let otherRolesTotalQty = 0;
+
+      ORIGINAL_ROLE_POOL.forEach(role => {
+        if (role.name !== "社會百姓") {
+          otherRolesTotalQty += role.baseQty;
+        }
+      });
+
+      let civilianQty = totalStudents - otherRolesTotalQty;
+      
+      if (civilianQty < 0) {
+        civilianQty = 0;
+        alert(`警告：目前輸入學生人數 (${totalStudents}人) 較少。系統將優先指派核心角色，部分百姓角色將不參與分派。`);
+      }
+
+      // 填充角色池
+      ORIGINAL_ROLE_POOL.forEach(role => {
+        let count = (role.name === "社會百姓") ? civilianQty : role.baseQty;
+        for (let i = 0; i < count; i++) {
+          activeRolePool.push({
+            name: role.name,
+            faction: role.faction,
+            goal: role.goal
+          });
+        }
+      });
+
+      // 超出 30 人，多餘名額皆以百姓填充
+      if (activeRolePool.length < totalStudents) {
+        const diff = totalStudents - activeRolePool.length;
+        const civilianTemplate = ORIGINAL_ROLE_POOL.find(r => r.name === "社會百姓");
+        for (let i = 0; i < diff; i++) {
+          activeRolePool.push({
+            name: civilianTemplate.name,
+            faction: civilianTemplate.faction,
+            goal: civilianTemplate.goal
+          });
+        }
+      }
+      
+      // 不足 30 人，優先刪除非關鍵角色
+      while (activeRolePool.length > totalStudents) {
+        let removeIndex = activeRolePool.findIndex(r => r.name === "社會百姓");
+        if (removeIndex === -1) removeIndex = activeRolePool.findIndex(r => r.name === "雜貨店老闆");
+        if (removeIndex === -1) removeIndex = activeRolePool.findIndex(r => r.name.startsWith("警察"));
+        if (removeIndex === -1) removeIndex = activeRolePool.length - 1;
+        activeRolePool.splice(removeIndex, 1);
+      }
+
+      // 隨機洗牌
+      for (let i = activeRolePool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [activeRolePool[i], activeRolePool[j]] = [activeRolePool[j], activeRolePool[i]];
+      }
+
+      // 組裝學生狀態
+      currentStudents = studentNames.map((studentName, index) => {
+        const assignedRole = activeRolePool[index];
+        return {
+          id: `student_${index}_${Date.now()}`,
+          name: studentName,
+          roleName: assignedRole.name,
+          faction: assignedRole.faction,
+          goal: assignedRole.goal,
+          isAlive: true,
+          isRed: false,
+          isArrested: false
+        };
+      });
+
+      document.getElementById("toggleHideBtn").disabled = false;
+      renderStudentGrid();
+    }
+
+    // 渲染卡片
+    function renderStudentGrid() {
+      const grid = document.getElementById("studentGrid");
+      const emptyState = document.getElementById("emptyState");
+      
+      if (currentStudents.length === 0) {
+        grid.classList.add("hidden");
+        emptyState.classList.remove("hidden");
+        return;
+      }
+
+      emptyState.classList.add("hidden");
+      grid.classList.remove("hidden");
+      grid.innerHTML = "";
+
+      let govCount = 0;
+      let commCount = 0;
+      let civCount = 0;
+      let aliveCount = 0;
+      let deadCount = 0;
+
+      currentStudents.forEach(student => {
+        if (student.faction === "government") govCount++;
+        else if (student.faction === "communist") commCount++;
+        else if (student.faction === "civilian") civCount++;
+
+        if (student.isAlive) aliveCount++;
+        else deadCount++;
+
+        const factionInfo = FACTION_MAP[student.faction];
+        
+        let cardBg = student.isAlive ? "bg-news-paper" : "bg-news-darkpaper/40 opacity-65";
+        let cardBorder = student.isAlive ? `border-${factionInfo.borderClass}` : "border-news-gray/40";
+        
+        if (student.isArrested && student.isAlive) {
+          cardBg = "bg-news-darkpaper/60";
+          cardBorder = "border-dashed border-news-ink";
+        }
+
+        const card = document.createElement("div");
+        card.className = `p-4 rounded border-2 ${cardBg} ${cardBorder} transition-all duration-200 shadow-sm flex flex-col justify-between gap-3`;
+        
+        const roleDisplay = isRoleHidden 
+          ? `<span class="bg-news-darkpaper text-news-gray px-2 py-0.5 rounded text-xs tracking-wider">🔒 機密已蔽</span>` 
+          : `
+            <div class="flex items-center gap-1.5 mt-1 flex-wrap">
+              <span class="text-xs font-bold text-news-red">${student.roleName}</span>
+              <span class="text-[10px] px-1.5 py-0.5 border border-news-ink/30 ${factionInfo.bgClass} ${factionInfo.textClass} font-bold">${factionInfo.name}</span>
+            </div>
+          `;
+
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div class="cursor-pointer group/name" onclick="openSecretModal('${student.id}')" title="按此可秘密查看">
+              <h3 class="text-lg font-bold text-news-ink group-hover/name:text-news-red transition flex items-center gap-1.5 font-serif">
+                <i class="fa-solid fa-address-book text-news-gray text-sm group-hover/name:text-news-red"></i>
+                ${student.name}
+              </h3>
+              ${roleDisplay}
+            </div>
+            <!-- 右上狀態徽章 -->
+            <div class="flex flex-col gap-1 items-end">
+              ${student.isAlive 
+                ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.5 border border-emerald-300 font-bold">存活</span>' 
+                : '<span class="bg-news-red text-white text-[10px] px-1.5 py-0.5 font-bold animate-pulse">槍決 💀</span>'
+              }
+              ${student.isArrested ? '<span class="bg-news-ink text-white text-[10px] px-1.5 py-0.5 font-bold">🚨 逮捕</span>' : ''}
+              ${student.isRed ? '<span class="border border-news-red text-news-red text-[10px] px-1.5 py-0.5 font-bold">☭ 赤化</span>' : ''}
+            </div>
+          </div>
+
+          <!-- 底部控制 -->
+          <div class="border-t border-news-ink/20 pt-3 flex flex-wrap items-center justify-between gap-2 mt-auto">
+            <div class="flex gap-1">
+              <button onclick="toggleLife('${student.id}', true)" 
+                class="px-2 py-1 text-xs font-bold transition-all ${student.isAlive ? 'bg-news-ink text-white' : 'bg-news-darkpaper text-news-gray hover:bg-news-darkpaper/60'}">
+                存活
+              </button>
+              <button onclick="toggleLife('${student.id}', false)" 
+                class="px-2 py-1 text-xs font-bold transition-all ${!student.isAlive ? 'bg-news-red text-white' : 'bg-news-darkpaper text-news-gray hover:bg-news-darkpaper/60'}">
+                死亡
+              </button>
+            </div>
+
+            <div class="flex gap-2">
+              <label class="flex items-center gap-1 cursor-pointer text-xs text-news-lead select-none">
+                <input type="checkbox" ${student.isRed ? 'checked' : ''} 
+                  onchange="toggleSpecialStatus('${student.id}', 'isRed', this.checked)"
+                  class="rounded bg-news-paper border-news-ink text-news-red focus:ring-news-red">
+                <span class="${student.isRed ? 'text-news-red font-bold' : ''}">赤化</span>
+              </label>
+
+              <label class="flex items-center gap-1 cursor-pointer text-xs text-news-lead select-none">
+                <input type="checkbox" ${student.isArrested ? 'checked' : ''} 
+                  onchange="toggleSpecialStatus('${student.id}', 'isArrested', this.checked)"
+                  class="rounded bg-news-paper border-news-ink text-news-red focus:ring-news-red">
+                <span class="${student.isArrested ? 'text-news-ink font-bold' : ''}">逮捕</span>
+              </label>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      document.getElementById("statGov").innerText = govCount;
+      document.getElementById("statComm").innerText = commCount;
+      document.getElementById("statCiv").innerText = civCount;
+      document.getElementById("statAlive").innerText = aliveCount;
+      document.getElementById("statDead").innerText = deadCount;
+    }
+
+    // 切換生死狀態：增加同身分生死連動，且歷史與抗議事件連動
+    function toggleLife(studentId, isAlive) {
+      const student = currentStudents.find(s => s.id === studentId);
+      if (!student) return;
+
+      const roleName = student.roleName;
+
+      if (!isAlive) {
+        // 【死亡連動】：使所有扮演同一個 roleName 的同學一併死亡
+        let anyStudentDiedThisTime = false;
+        
+        currentStudents.forEach(s => {
+          if (s.roleName === roleName && s.isAlive) {
+            s.isAlive = false;
+            anyStudentDiedThisTime = true;
+          }
+        });
+
+        // 如果這次操作真的引發了某些存活學生的死亡狀態，則觸發對應劇情聯動
+        if (anyStudentDiedThisTime) {
+          // 邏輯連動一：一般學生死亡（觸發百姓大規模抗議）
+          if (roleName === "學生a" || roleName === "學生b" || roleName === "學生c") {
+            triggerProtestAlert();
+          }
+
+          // 邏輯連動二：歷史名士遭遇死難（彈出號外新聞視窗）
+          if (HISTORICAL_PEOPLE_INFO[roleName]) {
+            triggerHistoricalNews(roleName);
+          }
+        }
+      } else {
+        // 【存活連動】：若要復活，一併將同身分的所有同學復活
+        currentStudents.forEach(s => {
+          if (s.roleName === roleName) {
+            s.isAlive = true;
+          }
+        });
+      }
+
+      renderStudentGrid();
+    }
+
+    function toggleSpecialStatus(studentId, field, value) {
+      const student = currentStudents.find(s => s.id === studentId);
+      if (!student) return;
+
+      student[field] = value;
+      renderStudentGrid();
+    }
+
+    function toggleHideRoles() {
+      isRoleHidden = !isRoleHidden;
+      const btn = document.getElementById("toggleHideBtn");
+      const icon = document.getElementById("hideIcon");
+      const text = document.getElementById("hideText");
+
+      if (isRoleHidden) {
+        btn.classList.add("bg-news-red", "text-white");
+        btn.classList.remove("bg-news-paper");
+        icon.className = "fa-solid fa-eye";
+        text.innerText = "投影保密模式：開";
+      } else {
+        btn.classList.add("bg-news-paper");
+        btn.classList.remove("bg-news-red", "text-white");
+        icon.className = "fa-solid fa-eye-slash";
+        text.innerText = "投影保密模式：關";
+      }
+
+      renderStudentGrid();
+    }
+
+    function triggerProtestAlert() {
+      const alertBanner = document.getElementById("alertBanner");
+      alertBanner.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function dismissAlert() {
+      document.getElementById("alertBanner").classList.add("hidden");
+    }
+
+    // 觸發「號外新聞剪報」
+    function triggerHistoricalNews(roleName) {
+      const info = HISTORICAL_PEOPLE_INFO[roleName];
+      if (!info) return;
+
+      document.getElementById("historicalNewsHeadline").innerText = info.headline;
+      document.getElementById("historicalNewsDate").innerText = info.date;
+      document.getElementById("historicalNewsBody").innerHTML = info.body;
+
+      document.getElementById("historicalNewsModal").classList.remove("hidden");
+    }
+
+    function closeHistoricalNewsModal() {
+      document.getElementById("historicalNewsModal").classList.add("hidden");
+    }
+
+    // 秘密盲抽彈窗
+    function openSecretModal(studentId) {
+      const student = currentStudents.find(s => s.id === studentId);
+      if (!student) return;
+
+      const factionInfo = FACTION_MAP[student.faction];
+
+      document.getElementById("modalStudentName").innerText = student.name;
+      document.getElementById("modalRoleName").innerText = student.roleName;
+      document.getElementById("modalFactionName").innerText = factionInfo.name;
+      document.getElementById("modalFactionName").className = `text-base font-black ${factionInfo.textClass}`;
+      document.getElementById("modalRoleGoal").innerText = student.goal;
+
+      document.getElementById("secretModal").classList.remove("hidden");
+    }
+
+    function closeSecretModal() {
+      document.getElementById("secretModal").classList.add("hidden");
+    }
+
+    function resetSystem() {
+      if (confirm("確認重置系統？這將清除目前班級所有分派數據與狀態。")) {
+        currentStudents = [];
+        isRoleHidden = false;
+        
+        const btn = document.getElementById("toggleHideBtn");
+        btn.disabled = true;
+        btn.classList.add("bg-news-paper");
+        btn.classList.remove("bg-news-red", "text-white");
+        document.getElementById("hideIcon").className = "fa-solid fa-eye-slash";
+        document.getElementById("hideText").innerText = "投影保密模式：關";
+
+        dismissAlert();
+        renderStudentGrid();
+      }
+    }
+  </script>
+</body>
+</html>
