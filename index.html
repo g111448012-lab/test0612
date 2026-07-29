@@ -66,10 +66,8 @@
   <!-- 報頭區域 -->
   <header class="border-b-4 border-news-ink py-4 px-4 md:px-8 bg-news-paper">
     <div class="max-w-7xl mx-auto">
-      <div class="flex justify-between items-center text-xs font-mono border-b border-news-ink pb-2 mb-2">
-        <span class="font-bold text-news-red">《風平浪靜下的暗潮湧動》</span>
-        <span class="font-bold">號外 / EXTRA</span>
-        <span class="tracking-widest font-bold hidden sm:inline">臺灣省警備總司令部 · 局勢掌握系統</span>
+      <div class="text-center border-b border-news-ink pb-2 mb-2">
+        <span class="font-bold text-news-red text-sm tracking-widest">《風平浪靜下的暗潮湧動》</span>
       </div>
       
       <div class="text-center my-3">
@@ -78,11 +76,8 @@
         </h1>
       </div>
 
-      <div class="border-t-2 border-news-ink pt-2 flex flex-col sm:flex-row justify-between items-center text-xs font-bold text-news-lead gap-2">
-        <div><span>教學單元：白色恐怖與戒嚴歷史探究與實作</span></div>
-        <div class="flex gap-4">
-          <span>狀態：嚴密監控中</span>
-        </div>
+      <div class="border-t-2 border-news-ink pt-2 flex justify-end items-center text-xs font-bold text-news-lead">
+        <span>狀態：嚴密監控中</span>
       </div>
     </div>
   </header>
@@ -117,7 +112,7 @@
 
         <div class="flex justify-between items-center mb-3 mt-1">
           <div class="text-sm font-bold text-news-ink">
-            當前週期：<span id="cycleDisplay" class="text-lg font-black text-news-red">第 1 週期 (第1年)</span>
+            當前週期：<span id="cycleDisplay" class="text-lg font-black text-news-red">第 1 週期</span>
           </div>
           <div id="phaseBadge" class="bg-amber-800 text-white text-xs font-bold px-2 py-1 rounded">
             白天：自由交涉
@@ -154,7 +149,7 @@
           </button>
         </div>
 
-        <!-- 國家與國大抗議計數 -->
+        <!-- 國大代表抗議計數 -->
         <div class="mt-4 pt-3 border-t border-news-ink/30 flex justify-between items-center text-xs">
           <span class="font-bold text-news-ink">國大代表累積抗議次數：</span>
           <div class="flex items-center gap-2">
@@ -164,6 +159,16 @@
           </div>
         </div>
         <p class="text-[10px] text-news-gray mt-1">※ 國大抗議 ≥2 次，政府與警察陣營自動判定失敗，家長復仇成功。</p>
+
+        <!-- 國民大會代表信用值 -->
+        <div class="mt-3 pt-2 border-t border-news-ink/20 flex justify-between items-center text-xs">
+          <span class="font-bold text-news-ink">國民大會信用值：</span>
+          <div class="flex items-center gap-2">
+            <button onclick="adjustCredit(-1)" class="w-6 h-6 bg-news-paper border border-news-ink font-bold rounded flex items-center justify-center hover:bg-news-darkpaper">-</button>
+            <span id="creditCount" class="font-mono font-black text-sm text-amber-800">0</span>
+            <button onclick="adjustCredit(1)" class="w-6 h-6 bg-news-paper border border-news-ink font-bold rounded flex items-center justify-center hover:bg-news-darkpaper">+</button>
+          </div>
+        </div>
       </div>
 
       <!-- 名冊輸入 -->
@@ -173,7 +178,7 @@
         </div>
         
         <h2 class="text-sm font-bold mb-2 text-news-ink flex items-center gap-2 border-b border-news-ink pb-2">
-          <i class="fa-solid fa-file-pen"></i> 輸入課堂名單 (可貼上班級名條)
+          <i class="fa-solid fa-file-pen"></i> 輸入課堂名單
         </h2>
         
         <div class="mb-3">
@@ -189,7 +194,7 @@
         </div>
       </div>
 
-      <!-- 隨機指派按鈕 -->
+      <!-- 隨機指派按鈕 (已精簡) -->
       <div class="bg-news-paper border-2 border-news-ink p-5 rounded shadow-sm relative">
         <div class="absolute -top-3 left-4 bg-news-ink text-news-paper px-3 py-0.5 text-xs font-bold tracking-wider">
           動員 · 角色派發
@@ -198,20 +203,6 @@
         <p class="text-xs text-news-lead mb-3 leading-relaxed">
           系統將依據您輸入的名冊人數彈性分派身分。多餘的人數將自動分配為<strong>「社會老百姓」</strong>。
         </p>
-
-        <!-- 角色結構點開查看 -->
-        <details class="mb-3 group bg-news-darkpaper/20 border border-news-ink rounded overflow-hidden text-xs">
-          <summary class="p-2 text-news-ink font-bold cursor-pointer select-none flex justify-between items-center hover:bg-news-darkpaper/30">
-            <span>檢視《風平浪靜下的暗潮湧動》預設配額與初始金幣</span>
-            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180"></i>
-          </summary>
-          <div class="p-3 text-news-lead space-y-1.5 border-t border-news-ink bg-news-paper/40 text-[11px]">
-            <div><strong class="text-news-red">政府 (7席)</strong>：蔣中正(2人,$30)、甲/乙/丙警察(各1人,$0)、國大代表(2人,$0)</div>
-            <div><strong class="text-amber-800 font-bold">讀書會 (12席)</strong>：領導者甲/乙/丙(各2人,$5)、學生甲/乙/丙(各2人,$0)</div>
-            <div><strong class="text-news-ink underline">共產黨 (2席)</strong>：地下共產黨員(2人,$5)</div>
-            <div><strong class="text-news-gray font-bold">社會民眾 (6+席)</strong>：學生甲/乙/丙家長(各2人,$15)、其餘皆為社會老百姓($0)</div>
-          </div>
-        </details>
 
         <button onclick="distributeRoles()" 
           class="w-full bg-news-ink hover:bg-news-lead text-news-paper font-bold py-2.5 px-4 rounded tracking-wider transition-all transform active:scale-95 flex items-center justify-center gap-2 shadow text-xs">
@@ -294,7 +285,7 @@
 
   <!-- 頁尾 -->
   <footer class="mt-auto bg-news-ink py-3 px-4 text-center text-xs text-news-paper">
-    <p>《無聲的社會》二二八戒嚴劇本殺課堂管理系統 · 歷史探究與實作教案專用</p>
+    <p>《風平浪靜下的暗潮湧動》白色恐怖劇本殺課堂管理系統 · 歷史探究與實作教案專用</p>
   </footer>
 
   <!-- 彈窗 A：學生秘密盲抽身分確認 -->
@@ -370,20 +361,15 @@
     </div>
   </div>
 
-  <!-- 頁尾 -->
-  <footer class="mt-auto bg-news-ink py-3 px-4 text-center text-xs text-news-paper">
-    <p>《風平浪靜下的暗潮湧動》白色恐怖劇本殺課堂管理系統 · 歷史探究與實作教案專用</p>
-  </footer>
-
   <script>
-    // 預設角色與配額資料庫 (依照老師指定之最新配額)
+    // 預設角色與配額資料庫 (依據使用者最新指定之配額)
     const ORIGINAL_ROLE_POOL = [
       // 政府陣營 (7席)
       { name: "蔣中正", faction: "government", baseQty: 2, coins: 30, goal: "【政府首腦】統治最高者。每週期獲得10金幣。勝利條件：綠島關押至少3名威脅者（領導者或共產黨），且國大代表發動抗議次數 < 2 次。" },
       { name: "甲警察", faction: "government", baseQty: 1, coins: 0, goal: "【執法單位】擁有抓捕與審訊權。勝利條件：政府陣營獲勝，且遊戲結束時個人金幣達到 10 枚以上。" },
       { name: "乙警察", faction: "government", baseQty: 1, coins: 0, goal: "【執法單位】擁有抓捕與審訊權。勝利條件：政府陣營獲勝，且遊戲結束時個人金幣達到 10 枚以上。" },
       { name: "丙警察", faction: "government", baseQty: 1, coins: 0, goal: "【執法單位】擁有抓捕與審訊權。勝利條件：政府陣營獲勝，且遊戲結束時個人金幣達到 10 枚以上。" },
-      { name: "國民大會代表", faction: "government", baseQty: 2, coins: 0, goal: "【政治制衡】可發動抗議癱瘓警察抓人。勝利條件：遊戲結束時個人金幣達到 25 枚以上（無論政府是否獲勝）。" },
+      { name: "國民大會代表", faction: "government", baseQty: 2, coins: 0, goal: "【政治制衡】可發動抗議癱瘓警察抓人。勝利條件：個人金幣達到 25 枚以上且信用值為 1（成功斂財且守護聲譽）。" },
 
       // 讀書會陣營 (12席)
       { name: "讀書會領導者甲", faction: "study_group", baseQty: 2, coins: 5, goal: "【思想啟蒙】每週期獲得2金幣。勝利條件：自己未被逮捕/處決，且場上至少有2名學生持有【禁書小卡】且未赤化。" },
@@ -409,6 +395,7 @@
     let currentCycle = 1;
     let currentPhase = 'day'; // 'day' 或 'night'
     let protestCount = 0;
+    let globalCreditCount = 0; // 國大代表全域/預設信用值
     let timerInterval = null;
     let timerSeconds = 20 * 60; // 預設白天20分鐘
 
@@ -434,7 +421,7 @@
       return text.split("\n").map(n => n.trim()).filter(n => n !== "");
     }
 
-    // 隨機指派邏輯 (按教案配額)
+    // 隨機指派邏輯
     function distributeRoles() {
       const names = parseStudentNames(document.getElementById("studentInput").value);
       if (names.length === 0) {
@@ -446,7 +433,6 @@
       const total = names.length;
       let activePool = [];
 
-      // 計算非老百姓總數
       let coreRoles = [];
       ORIGINAL_ROLE_POOL.forEach(r => {
         if (r.name !== "社會老百姓") {
@@ -483,13 +469,14 @@
           roleName: role.name,
           baseFaction: role.faction,
           coins: role.coins,
+          credit: 0,          // 信用值機制 (國大代表初始為0)
           goal: role.goal,
           isAlive: true,
           isArrested: false,
           isRed: false,       // 赤化標記
           hasBook: false,     // 禁書小卡
           isInformant: false, // 線民
-          wronglyArrestedBonus: false // 家長因孩子遭誤抓而收入加倍
+          wronglyArrestedBonus: false
         };
       });
 
@@ -497,13 +484,13 @@
       renderStudentGrid();
     }
 
-    // 依教案 PDF 規則計算學生動態陣營 (優先順序：赤化 > 禁書 > 線民)
+    // 依教案規則計算學生動態陣營
     function getEffectiveFaction(student) {
       if (student.roleName.startsWith("學生")) {
         if (student.isRed) return "communist";
         if (student.hasBook) return "study_group";
         if (student.isInformant) return "government";
-        return "civilian"; // 未選擇時為中立民眾
+        return "civilian";
       }
       return student.baseFaction;
     }
@@ -552,6 +539,16 @@
             </div>
           `;
 
+        // 若為國大代表，額外顯示個人信用值微調
+        const creditAdjuster = (student.roleName === "國民大會代表" && !isRoleHidden) ? `
+          <div class="flex items-center gap-1 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-300 text-[11px]">
+            <span class="text-amber-900 font-bold">信用:</span>
+            <button onclick="adjustIndividualCredit('${student.id}', -1)" class="px-1 bg-news-paper border border-news-ink/30 rounded font-bold">-</button>
+            <span class="font-mono font-black text-amber-900">${student.credit}</span>
+            <button onclick="adjustIndividualCredit('${student.id}', 1)" class="px-1 bg-news-paper border border-news-ink/30 rounded font-bold">+</button>
+          </div>
+        ` : '';
+
         card.innerHTML = `
           <div class="flex justify-between items-start">
             <div class="cursor-pointer group/name" onclick="openSecretModal('${student.id}')" title="點擊進行極機密確認">
@@ -569,6 +566,7 @@
                     ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.5 border border-emerald-300 font-bold">存活</span>' 
                     : '<span class="bg-news-red text-white text-[10px] px-1.5 py-0.5 font-bold animate-pulse">槍決 💀</span>')
               }
+              ${creditAdjuster}
             </div>
           </div>
 
@@ -586,7 +584,7 @@
             </div>
           </div>
 
-          <!-- 特殊標記勾選 (教案核心機制) -->
+          <!-- 特殊標記勾選 -->
           <div class="grid grid-cols-3 gap-1 text-[11px] bg-news-paper/60 p-1.5 border border-news-ink/10 rounded">
             <label class="flex items-center gap-1 cursor-pointer select-none">
               <input type="checkbox" ${student.hasBook ? 'checked' : ''} onchange="toggleStatus('${student.id}', 'hasBook', this.checked)">
@@ -631,7 +629,6 @@
       document.getElementById("statDead").innerText = counts.dead;
     }
 
-    // 調整金幣
     function adjustCoins(id, amount) {
       const stu = currentStudents.find(s => s.id === id);
       if (stu) {
@@ -640,7 +637,14 @@
       }
     }
 
-    // 設定狀態標記
+    function adjustIndividualCredit(id, amount) {
+      const stu = currentStudents.find(s => s.id === id);
+      if (stu) {
+        stu.credit = (stu.credit || 0) + amount;
+        renderStudentGrid();
+      }
+    }
+
     function toggleStatus(id, field, value) {
       const stu = currentStudents.find(s => s.id === id);
       if (stu) {
@@ -649,7 +653,6 @@
       }
     }
 
-    // 設定生死與逮捕狀態
     function setLifeState(id, state) {
       const stu = currentStudents.find(s => s.id === id);
       if (!stu) return;
@@ -663,8 +666,6 @@
       } else if (state === 'dead') {
         stu.isAlive = false;
         stu.isArrested = false;
-        
-        // 若遭槍決且屬於一般學生，觸發民眾抗議警告
         if (stu.roleName.startsWith("學生")) {
           triggerProtestAlert();
         }
@@ -672,7 +673,6 @@
       renderStudentGrid();
     }
 
-    // 週期與計時控制邏輯
     function toggleTimer() {
       const btn = document.getElementById("timerBtn");
       if (timerInterval) {
@@ -727,23 +727,17 @@
       resetTimer();
     }
 
-    // 推進下一週期並依教案自動撥放津貼
     function nextCycle() {
       if (currentCycle >= 3) {
         if (!confirm("目前已是第 3 週期（最後一年）。確定要繼續推進嗎？")) return;
       }
 
       currentCycle++;
-      document.getElementById("cycleDisplay").innerText = `第 ${currentCycle} 週期 (第${currentCycle}年)`;
+      document.getElementById("cycleDisplay").innerText = `第 ${currentCycle} 週期`;
 
-      // 依教案發放週期津貼:
-      // 蔣中正: +10
-      // 讀書會領導者: +2
-      // 地下共產黨員: +2
-      // 家長: +5 (若孩子曾遭誤抓，加倍為 +10)
       let grantLog = [];
       currentStudents.forEach(s => {
-        if (!s.isAlive) return; // 死亡不發津貼
+        if (!s.isAlive) return;
 
         if (s.roleName === "蔣中正") {
           s.coins += 10;
@@ -770,6 +764,19 @@
     function adjustProtest(val) {
       protestCount = Math.max(0, protestCount + val);
       document.getElementById("protestCount").innerText = `${protestCount} 次`;
+    }
+
+    function adjustCredit(val) {
+      globalCreditCount += val;
+      document.getElementById("creditCount").innerText = `${globalCreditCount}`;
+      
+      // 同步更新場上所有國大代表的個人信用值 (若尚未獨立調整)
+      currentStudents.forEach(s => {
+        if (s.roleName === "國民大會代表") {
+          s.credit = globalCreditCount;
+        }
+      });
+      renderStudentGrid();
     }
 
     function toggleHideRoles() {
@@ -801,7 +808,7 @@
       document.getElementById("alertBanner").classList.add("hidden");
     }
 
-    // 終局勝負判定演算法 (自動比對 PDF 教案規範)
+    // 終局勝負判定演算法
     function evaluateVictory() {
       if (currentStudents.length === 0) {
         alert("請先分派角色並進行遊戲！");
@@ -812,7 +819,6 @@
       reportDiv.innerHTML = "";
 
       // 1. 政府與警察條件
-      // 綠島關押威脅者（領導者或共產黨）
       const greenIslandThreats = currentStudents.filter(s => 
         s.isArrested && (s.roleName.startsWith("讀書會領導者") || s.roleName === "地下共產黨員")
       ).length;
@@ -828,13 +834,18 @@
         coins: p.coins
       }));
 
-      // 國大代表
+      // 國大代表 (判定：金幣 >= 25 且 信用值 == 1)
       const naPlayers = currentStudents.filter(s => s.roleName === "國民大會代表");
-      let naResults = naPlayers.map(n => ({
-        name: n.name,
-        win: n.coins >= 25,
-        coins: n.coins
-      }));
+      let naResults = naPlayers.map(n => {
+        const effCredit = (n.credit !== undefined) ? n.credit : globalCreditCount;
+        const win = (n.coins >= 25) && (effCredit === 1);
+        return {
+          name: n.name,
+          win: win,
+          coins: n.coins,
+          credit: effCredit
+        };
+      });
 
       // 2. 讀書會條件
       const leadersAlive = currentStudents.filter(s => s.roleName.startsWith("讀書會領導者") && s.isAlive && !s.isArrested);
@@ -860,7 +871,7 @@
 
         <!-- 警察個人 -->
         <div class="p-3 border rounded bg-news-paper border-news-ink/30">
-          <h4 class="font-bold text-sm text-news-ink">👮 警察個人勝利判定</h4>
+          <h4 class="font-bold text-sm text-news-ink">👮 警察個人勝利判定 (需政府勝且個人金幣≥10)</h4>
           ${policeResults.map(p => `
             <div class="flex justify-between border-b border-news-ink/10 py-1">
               <span>${p.name} (${p.role}) - 持金幣 ${p.coins} 枚</span>
@@ -869,15 +880,15 @@
           `).join('')}
         </div>
 
-        <!-- 國大代表 -->
+        <!-- 國大代表 (更新門檻檢測) -->
         <div class="p-3 border rounded bg-news-paper border-news-ink/30">
-          <h4 class="font-bold text-sm text-news-ink">📜 國民大會代表勝利判定 (需金幣≥25枚)</h4>
-          ${naResults.map(n => `
+          <h4 class="font-bold text-sm text-news-ink">📜 國民大會代表勝負判定 (需金幣≥25 且 信用值=1)</h4>
+          ${naResults.length > 0 ? naResults.map(n => `
             <div class="flex justify-between border-b border-news-ink/10 py-1">
-              <span>${n.name} - 持金幣 ${n.coins} 枚</span>
-              <strong class="${n.win ? 'text-emerald-700' : 'text-news-red'}">${n.win ? '🏆 斂財成功獲勝' : '❌ 未達標'}</strong>
+              <span>${n.name} - 持金幣 ${n.coins} 枚 | 個人信用值: ${n.credit}</span>
+              <strong class="${n.win ? 'text-emerald-700' : 'text-news-red'}">${n.win ? '🏆 達成條件獲勝' : '❌ 未達標 (需金幣≥25且信用值=1)'}</strong>
             </div>
-          `).join('')}
+          `).join('') : '<p class="text-news-gray">場上無國大代表</p>'}
         </div>
 
         <!-- 讀書會 -->
@@ -908,7 +919,6 @@
       document.getElementById("victoryModal").classList.add("hidden");
     }
 
-    // 秘密彈窗
     function openSecretModal(studentId) {
       const student = currentStudents.find(s => s.id === studentId);
       if (!student) return;
@@ -936,9 +946,11 @@
         isRoleHidden = false;
         currentCycle = 1;
         protestCount = 0;
+        globalCreditCount = 0;
         
-        document.getElementById("cycleDisplay").innerText = `第 1 週期 (第1年)`;
+        document.getElementById("cycleDisplay").innerText = `第 1 週期`;
         document.getElementById("protestCount").innerText = `0 次`;
+        document.getElementById("creditCount").innerText = `0`;
         
         const btn = document.getElementById("toggleHideBtn");
         btn.disabled = true;
