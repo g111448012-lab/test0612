@@ -75,7 +75,13 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-stone-100 text-stone-700 border border-stone-300">
+        <!-- 新增：教師指南按鈕 -->
+        <button onclick="openGuideModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-news-ink text-white hover:bg-stone-800 transition shadow-xs">
+          <i class="fa-solid fa-book-open text-amber-400"></i>
+          教師指南與課堂手冊
+        </button>
+
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-stone-100 text-stone-700 border border-stone-300">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           課堂監控中
         </span>
@@ -325,6 +331,39 @@
           關閉報告
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- 彈窗 C：教師教學指南與課堂實務手冊 (新增) -->
+  <div id="guideModal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white text-news-ink max-w-4xl w-full rounded-xl p-6 max-h-[90vh] overflow-y-auto shadow-2xl relative border border-stone-300">
+      
+      <!-- 標頭 -->
+      <div class="flex justify-between items-center border-b border-stone-200 pb-3 mb-4">
+        <div>
+          <span class="text-xs text-news-red font-mono font-bold tracking-widest block">TEACHER'S HANDBOOK & GUIDE</span>
+          <h2 class="text-xl font-black text-news-ink font-serif flex items-center gap-2">
+            <i class="fa-solid fa-graduation-cap text-news-red"></i> 《風平浪靜下的暗潮湧動》課堂實施與系統使用手冊
+          </h2>
+        </div>
+        <button onclick="closeGuideModal()" class="text-stone-400 hover:text-stone-700 text-xl p-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- 手冊內容 (待編輯) -->
+      <div class="py-16 text-center text-stone-400 font-serif">
+        <i class="fa-solid fa-pen-ruler text-4xl mb-3 block text-stone-300"></i>
+        <p class="text-base font-bold text-stone-600">[待編輯]</p>
+        <p class="text-xs mt-1 text-stone-400">使用手冊內容暫保留標題與按鈕，細節待日後編輯新增。</p>
+      </div>
+
+      <div class="pt-4 border-t border-stone-200 flex justify-end items-center">
+        <button onclick="closeGuideModal()" class="bg-news-ink hover:bg-stone-800 text-white font-bold py-2 px-6 rounded-lg text-xs transition">
+          關閉
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -876,6 +915,14 @@
 
     function closeSecretModal() {
       document.getElementById("secretModal").classList.add("hidden");
+    }
+
+    function openGuideModal() {
+      document.getElementById("guideModal").classList.remove("hidden");
+    }
+
+    function closeGuideModal() {
+      document.getElementById("guideModal").classList.add("hidden");
     }
 
     function resetSystem() {
